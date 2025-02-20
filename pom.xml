@@ -1,0 +1,313 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.example</groupId>
+  <artifactId>mailnator</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>mailnator</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <java-compiler.version>17</java-compiler.version>
+    <maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
+    <Playwright.version>1.50.0</Playwright.version>
+    <testng.version>7.10.2</testng.version>
+    <aspectjweaver.version>1.9.22.1</aspectjweaver.version>
+    <allure-testng.version>2.29.0</allure-testng.version>
+    <allure-plugin-api.version>2.32.0</allure-plugin-api.version>
+    <allure-maven.version>2.15.2</allure-maven.version>
+    <allure-environment-writer.version>1.0.0</allure-environment-writer.version>
+    <allure.cmd.download.url>https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline</allure.cmd.download.url>
+    <extentreports.version>5.1.2</extentreports.version>
+    <apache-poi.version>5.3.0</apache-poi.version>
+    <commons-io.version>2.18.0</commons-io.version>
+    <owner.version>1.0.12</owner.version>
+    <assertj.version>3.26.3</assertj.version>
+    <datafaker.version>2.4.2</datafaker.version>
+    <!-- Remove monte-screen-recorder if not used -->
+    <monte-screen-recorder.version>0.7.7.0</monte-screen-recorder.version>
+    <mysql-connector-java.version>8.0.33</mysql-connector-java.version>
+    <lombok.version>1.18.36</lombok.version>
+    <javax.mail.version>1.6.2</javax.mail.version>
+    <zip.version>1.17</zip.version>
+    <jackson.version>2.18.1</jackson.version>
+    <commons-lang3.version>3.17.0</commons-lang3.version>
+    <json-path.version>2.9.0</json-path.version>
+
+    <!-- Suite XML path -->
+    <suite.all>src/test/resources/suites/SuiteAll.xml</suite.all>
+
+    <maven.test.skip>false</maven.test.skip>
+    <maven.test.failure.ignore>false</maven.test.failure.ignore>
+  </properties>
+
+  <dependencies>
+    <!-- Guice for DI -->
+    <dependency>
+      <groupId>com.google.inject</groupId>
+      <artifactId>guice</artifactId>
+      <version>7.0.0</version>
+    </dependency>
+
+    <!-- Mailinator Client -->
+    <dependency>
+      <groupId>com.manybrain</groupId>
+      <artifactId>mailinator-client</artifactId>
+      <version>1.5</version>
+    </dependency>
+
+    <!-- Rest-Assured for API Testing (Test Scope) -->
+    <dependency>
+      <groupId>io.rest-assured</groupId>
+      <artifactId>rest-assured</artifactId>
+      <version>5.5.0</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- JSON Library -->
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>20250107</version>
+    </dependency>
+
+    <!-- Jackson Databind and Core -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+
+    <!-- JAXB API and Runtime -->
+    <dependency>
+      <groupId>javax.xml.bind</groupId>
+      <artifactId>jaxb-api</artifactId>
+      <version>2.3.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.jaxb</groupId>
+      <artifactId>jaxb-runtime</artifactId>
+      <version>2.3.1</version>
+    </dependency>
+
+    <!-- Playwright -->
+    <dependency>
+      <groupId>com.microsoft.playwright</groupId>
+      <artifactId>playwright</artifactId>
+      <version>${Playwright.version}</version>
+    </dependency>
+
+    <!-- TestNG -->
+    <dependency>
+      <groupId>org.testng</groupId>
+      <artifactId>testng</artifactId>
+      <version>${testng.version}</version>
+    </dependency>
+
+    <!-- JSON Path -->
+    <dependency>
+      <groupId>com.jayway.jsonpath</groupId>
+      <artifactId>json-path</artifactId>
+      <version>${json-path.version}</version>
+    </dependency>
+
+    <!-- Javax Mail -->
+    <dependency>
+      <groupId>com.sun.mail</groupId>
+      <artifactId>javax.mail</artifactId>
+      <version>${javax.mail.version}</version>
+    </dependency>
+
+    <!-- ZT Zip -->
+    <dependency>
+      <groupId>org.zeroturnaround</groupId>
+      <artifactId>zt-zip</artifactId>
+      <version>${zip.version}</version>
+    </dependency>
+
+    <!-- Apache Commons IO -->
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>${commons-io.version}</version>
+    </dependency>
+
+    <!-- Apache POI (Core and OOXML) -->
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi</artifactId>
+      <version>${apache-poi.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi-ooxml</artifactId>
+      <version>${apache-poi.version}</version>
+    </dependency>
+
+    <!-- Apache Commons Codec -->
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <version>1.15</version>
+    </dependency>
+
+    <!-- Logging: Log4j and SLF4J -->
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-api</artifactId>
+      <version>2.24.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>2.24.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>2.0.16</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>2.0.16</version>
+    </dependency>
+
+    <!-- AssertJ -->
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <version>${assertj.version}</version>
+    </dependency>
+
+    <!-- Datafaker -->
+    <dependency>
+      <groupId>net.datafaker</groupId>
+      <artifactId>datafaker</artifactId>
+      <version>${datafaker.version}</version>
+    </dependency>
+
+    <!-- Allure Plugin API -->
+    <dependency>
+      <groupId>io.qameta.allure</groupId>
+      <artifactId>allure-plugin-api</artifactId>
+      <version>${allure-plugin-api.version}</version>
+    </dependency>
+
+    <!-- Allure TestNG and Attachments -->
+    <dependency>
+      <groupId>io.qameta.allure</groupId>
+      <artifactId>allure-testng</artifactId>
+      <version>${allure-testng.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.qameta.allure</groupId>
+      <artifactId>allure-attachments</artifactId>
+      <version>${allure-testng.version}</version>
+    </dependency>
+
+    <!-- Allure Environment Writer -->
+    <dependency>
+      <groupId>com.github.automatedowl</groupId>
+      <artifactId>allure-environment-writer</artifactId>
+      <version>${allure-environment-writer.version}</version>
+    </dependency>
+
+    <!-- ExtentReports -->
+    <dependency>
+      <groupId>com.aventstack</groupId>
+      <artifactId>extentreports</artifactId>
+      <version>${extentreports.version}</version>
+    </dependency>
+
+    <!-- Owner -->
+    <dependency>
+      <groupId>org.aeonbits.owner</groupId>
+      <artifactId>owner</artifactId>
+      <version>${owner.version}</version>
+    </dependency>
+
+    <!-- Lombok -->
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>${lombok.version}</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <!-- Maven Compiler Plugin -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.10.1</version>
+          <configuration>
+            <source>${java-compiler.version}</source>
+            <target>${java-compiler.version}</target>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>exec-maven-plugin</artifactId>
+          <version>3.1.0</version>
+          <configuration>
+            <mainClass>com.assured.tests.T01_LoginTest</mainClass>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>${maven-surefire-plugin.version}</version>
+          <configuration>
+            <suiteXmlFiles>
+              <suiteXmlFile>src/test/resources/suites/SuiteAll.xml</suiteXmlFile>
+            </suiteXmlFiles>
+            <argLine>
+              -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectjweaver.version}/aspectjweaver-${aspectjweaver.version}.jar"
+            </argLine>
+            <redirectTestOutputToFile>true</redirectTestOutputToFile>
+            <testFailureIgnore>${maven.test.failure.ignore}</testFailureIgnore>
+            <systemPropertyVariables>
+              <allure.results.directory>target/allure-results</allure.results.directory>
+            </systemPropertyVariables>
+          </configuration>
+        </plugin>
+
+        <!-- Allure Maven Plugin -->
+        <plugin>
+          <groupId>io.qameta.allure</groupId>
+          <artifactId>allure-maven</artifactId>
+          <version>${allure-maven.version}</version>
+          <configuration>
+            <reportVersion>${allure-testng.version}</reportVersion>
+            <allureDownloadUrl>
+              ${allure.cmd.download.url}/${allure-testng.version}/allure-commandline-${allure-testng.version}.zip
+            </allureDownloadUrl>
+          </configuration>
+        </plugin>
+        <!-- Maven Javadoc Plugin -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>3.6.3</version>
+          <configuration>
+            <source>${java-compiler.version}</source>
+            <encoding>UTF-8</encoding>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+</project>
