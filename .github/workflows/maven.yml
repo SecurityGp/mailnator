@@ -1,13 +1,13 @@
-name: Playwright Java TestNG CI
+name: Playwright
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ main ]
+    branches: [ "main" ]
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,27 +17,38 @@ jobs:
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
+          java-version: '17'
           distribution: 'temurin'
-          java-version: 17
+          cache: maven
 
-      - name: Cache Maven packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-maven
+      - name: Build and Install Dependencies
+        run: mvn clean install -DskipTests
 
-      - name: Build and run tests
-        run: mvn clean test
-        # Ensure that your pom.xml is configured to run your TestNG tests
+      - name: Run Tests
+        run: mvn test
+
+      - name: Install Allure CLI
+        run: |
+          wget https://github.com/allure-framework/allure2/releases/download/2.19.0/allure-2.19.0.zip -O allure.zip
+          unzip allure.zip -d /opt/allure
+          echo "/opt/allure/allure-2.19.0/bin" >> $GITHUB_PATH
+        shell: bash
 
       - name: Generate Allure Report
-        run: mvn allure:report
-        # This step assumes that the Allure Maven plugin is properly configured in your pom.xml
+        run: |
+          allure generate target/allure-results -o allure-report --clean
+        env:
+          ALLURE_RESULTS_DIR: target/allure-results
+          ALLURE_REPORT_DIR: allure-report
 
-      - name: Upload Allure Report
+      - name: Upload Allure Report Artifact
         uses: actions/upload-artifact@v4
         with:
           name: allure-report
-          path: target/site/allure-maven
-          # Adjust the path based on your Allure report output directory
+          path: allure-report
+
+      - name: Upload Extent Report Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: extent-report
+          path: reports/ExtentReports
