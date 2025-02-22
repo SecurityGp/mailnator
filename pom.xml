@@ -286,20 +286,20 @@
             </systemPropertyVariables>
           </configuration>
         </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>3.5.2</version>
-          <configuration>
-            <!-- Redirect test output to a file (set to false if you want to stream to the console) -->
-            <redirectTestOutputToFile>false</redirectTestOutputToFile>
-            <!-- Run tests in a single fork to avoid concurrency issues -->
-            <forkCount>1</forkCount>
-            <reuseForks>false</reuseForks>
-            <!-- Optionally, disable the use of the system class loader -->
-            <useSystemClassLoader>false</useSystemClassLoader>
-          </configuration>
-        </plugin>
+<!--        <plugin>-->
+<!--          <groupId>org.apache.maven.plugins</groupId>-->
+<!--          <artifactId>maven-surefire-plugin</artifactId>-->
+<!--          <version>3.5.2</version>-->
+<!--          <configuration>-->
+<!--            &lt;!&ndash; Redirect test output to a file (set to false if you want to stream to the console) &ndash;&gt;-->
+<!--            <redirectTestOutputToFile>false</redirectTestOutputToFile>-->
+<!--            &lt;!&ndash; Run tests in a single fork to avoid concurrency issues &ndash;&gt;-->
+<!--            <forkCount>1</forkCount>-->
+<!--            <reuseForks>false</reuseForks>-->
+<!--            &lt;!&ndash; Optionally, disable the use of the system class loader &ndash;&gt;-->
+<!--            <useSystemClassLoader>false</useSystemClassLoader>-->
+<!--          </configuration>-->
+<!--        </plugin>-->
 
 
         <!-- Allure Maven Plugin -->
