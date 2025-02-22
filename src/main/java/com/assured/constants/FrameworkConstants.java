@@ -39,7 +39,7 @@ public final class FrameworkConstants {
     public static final String TELEGRAM_CHATID = PropertiesHelpers.getValue("TELEGRAM_CHATID");
     public static final String AUTHOR = PropertiesHelpers.getValue("AUTHOR");
     public static final String TARGET = PropertiesHelpers.getValue("TARGET");
-    public static final String HEADLESS = PropertiesHelpers.getValue("HEADLESS");
+    public static final boolean HEADLESS = Boolean.parseBoolean(PropertiesHelpers.getValue("HEADLESS"));
     public static final String OVERRIDE_REPORTS = PropertiesHelpers.getValue("OVERRIDE_REPORTS");
     public static final String OPEN_REPORTS_AFTER_EXECUTION = PropertiesHelpers.getValue("OPEN_REPORTS_AFTER_EXECUTION");
     public static final String SEND_EMAIL_TO_USERS = PropertiesHelpers.getValue("SEND_EMAIL_TO_USERS");

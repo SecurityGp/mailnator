@@ -33,7 +33,7 @@ public class AllureManager {
                         .put("Target Execution", FrameworkConstants.TARGET)
                         .put("Global Timeout", String.valueOf(FrameworkConstants.WAIT_DEFAULT))
                         .put("Page Load Timeout", String.valueOf(FrameworkConstants.WAIT_PAGE_LOADED))
-                        .put("Headless Mode", FrameworkConstants.HEADLESS)
+                        .put("Headless Mode", Boolean.toString(FrameworkConstants.HEADLESS))
                         // You may wish to update the browser information based on your Playwright configuration.
                         .put("Local Browser", String.valueOf(Browser.CHROME))
                         .put("Remote URL", FrameworkConstants.REMOTE_URL)

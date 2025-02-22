@@ -3,9 +3,11 @@ package com.assured.driver;
 import com.assured.constants.FrameworkConstants;
 import com.microsoft.playwright.*;
 
+import static com.assured.constants.FrameworkConstants.*;
+
 /**
  * PlaywrightFactory creates and manages Playwright objects using the browser type
- * defined in FrameworkConstants. It uses a switch-case to select the browser.
+ * defined in FrameworkConstants.
  */
 public final class PlaywrightFactory {
 
@@ -16,24 +18,18 @@ public final class PlaywrightFactory {
     // Private constructor to prevent instantiation.
     private PlaywrightFactory() { }
 
-    /**
-     * Creates a new Playwright Page instance with the given headless option.
-     *
-     * @param headless whether to run the browser in headless mode.
-     * @return a new Page instance.
-     */
     public static Page createPage(boolean headless) {
         // Create the Playwright instance.
         Playwright playwright = Playwright.create();
         playwrightThreadLocal.set(playwright);
 
-        // Configure launch options.
+        // Configure launch options using the passed headless parameter.
         BrowserType.LaunchOptions launchOptions = new BrowserType.LaunchOptions().setHeadless(headless);
 
         // Select the browser based on FrameworkConstants.
         String browserType = FrameworkConstants.BROWSER; // Expected values: "chromium", "firefox", "webkit"
         Browser browser = switch (browserType.toLowerCase()) {
-            case "chromium" -> playwright.chromium().launch(launchOptions);
+            case "chromium", "chrome" -> playwright.chromium().launch(launchOptions);
             case "firefox" -> playwright.firefox().launch(launchOptions);
             case "webkit" -> playwright.webkit().launch(launchOptions);
             default -> throw new IllegalArgumentException("Unsupported browser type: " + browserType);
@@ -43,7 +39,7 @@ public final class PlaywrightFactory {
         // Set up context options (for example, ignoring HTTPS errors and setting viewport size).
         Browser.NewContextOptions contextOptions = new Browser.NewContextOptions()
                 .setIgnoreHTTPSErrors(true)
-                .setViewportSize(1880, 1000);
+                .setViewportSize(1920, 1080);
 
         // Create a new browser context and then a new page.
         BrowserContext context = browser.newContext(contextOptions);
