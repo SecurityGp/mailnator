@@ -1,64 +1,62 @@
-name: Playwright Java TestNG CI
+name: Playwright
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ main ]
+    branches: [ "main" ]
 
 jobs:
-  build-and-test:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest  # ✅ Changed OS to Ubuntu
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    # Checkout code
+    - uses: actions/checkout@v4
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: 17
+    # Set up JDK 17
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
 
-      - name: Cache Maven packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-maven
+    # Build and Install Dependencies
+    - name: Build and Install Dependencies
+      run: mvn clean install -DskipTests
 
-      - name: Build and run tests
-        run: mvn clean test
-        # Ensure your tests initialize and flush ExtentReports,
-        # e.g., via ExtentReportManager.initReports() in a @BeforeSuite,
-        # and ExtentReportManager.createTest() in a @BeforeMethod.
+    # Run Automation Tests
+    - name: Run Tests
+      run: mvn test
 
-      - name: Generate Allure Report
-        run: mvn allure:report
-        # This step assumes the Allure Maven plugin is correctly configured in your pom.xml
+    # Install Allure CLI (Ubuntu)
+    - name: Install Allure CLI
+      run: |
+        wget https://github.com/allure-framework/allure2/releases/download/2.19.0/allure-2.19.0.zip -O allure.zip
+        unzip allure.zip -d /opt/allure
+        echo "/opt/allure/allure-2.19.0/bin" | sudo tee -a /etc/profile.d/allure.sh
+        source /etc/profile.d/allure.sh
+      shell: bash
 
-      - name: Prepare Extent Report Folder
-        run: |
-          # Check if target/report folder exists and is not empty
-          if [ ! -d "report" ] || [ -z "$(ls -A report)" ]; then
-            echo "report folder is missing or empty. Creating folder and copying report file."
-            mkdir -p report
-            # Adjust the source path of your generated extent report file as needed.
-            # For example, if your report file is generated at target/allure-results/extent-report.html:
-            cp target/allure-results/extent-report.html target/report/ || echo "Extent report file not found!"
-          else
-            echo "target/report folder exists and is not empty."
-          fi
+    # Generate Allure Report using CLI
+    - name: Generate Allure Report
+      run: |
+        allure generate target/allure-results -o allure-report --clean
+      env:
+        ALLURE_RESULTS_DIR: target/allure-results
+        ALLURE_REPORT_DIR: allure-report
 
-      - name: Upload Allure Report Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: allure-report
-          path: target/site/allure-maven
-          # Users will need to download the artifact and open index.html to view details.
+    # Upload Allure Report as Artifact
+    - name: Upload Allure Report
+      uses: actions/upload-artifact@v4
+      with:
+        name: allure-report
+        path: allure-report
 
-      - name: Upload Extent Report Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: extent-report
-          path: target/report
+    # Upload Extent Report (Ensure correct path)
+    - name: Upload Extent Report
+      uses: actions/upload-artifact@v4
+      with:
+        name: extent-report
+        path: reports/ExtentReports  # ✅ Updated to the correct expected path
