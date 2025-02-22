@@ -29,15 +29,36 @@ jobs:
 
       - name: Build and run tests
         run: mvn clean test
-        # Ensure that your pom.xml is configured to run your TestNG tests
+        # Ensure your tests initialize and flush ExtentReports,
+        # e.g., via ExtentReportManager.initReports() in a @BeforeSuite,
+        # and ExtentReportManager.createTest() in a @BeforeMethod.
 
       - name: Generate Allure Report
         run: mvn allure:report
-        # This step assumes that the Allure Maven plugin is properly configured in your pom.xml
+        # This step assumes the Allure Maven plugin is correctly configured in your pom.xml
 
-      - name: Upload Allure Report
+      - name: Prepare Extent Report Folder
+        run: |
+          # Check if target/report folder exists and is not empty
+          if [ ! -d "report" ] || [ -z "$(ls -A report)" ]; then
+            echo "report folder is missing or empty. Creating folder and copying report file."
+            mkdir -p report
+            # Adjust the source path of your generated extent report file as needed.
+            # For example, if your report file is generated at target/allure-results/extent-report.html:
+            cp target/allure-results/extent-report.html target/report/ || echo "Extent report file not found!"
+          else
+            echo "target/report folder exists and is not empty."
+          fi
+
+      - name: Upload Allure Report Artifact
         uses: actions/upload-artifact@v4
         with:
           name: allure-report
           path: target/site/allure-maven
-          # Adjust the path based on your Allure report output directory
+          # Users will need to download the artifact and open index.html to view details.
+
+      - name: Upload Extent Report Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: extent-report
+          path: target/report
