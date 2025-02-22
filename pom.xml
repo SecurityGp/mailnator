@@ -247,6 +247,8 @@
 
   <build>
     <pluginManagement>
+
+
       <plugins>
         <!-- Maven Compiler Plugin -->
         <plugin>
