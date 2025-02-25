@@ -87,11 +87,11 @@ public class P01_LoginPage extends CommonPageCRM {
 
         String domain = "private";
         String mailbox = "abc1";
-        String expectedFrom = "no-reply@withassured.com";
+        String expectedTo = "no-reply@withassured.com";
         String expectedSubject = "Onboarding Invite";
 
         // Retrieve URL from email
-        String mailUrl = PageActions.getMailUrl(domain, mailbox, expectedFrom, expectedSubject);
+        String mailUrl = PageActions.getMailUrl(mailbox, expectedTo, expectedSubject);
 
         PageActions.openNewBrowserAndPerformAction(() -> {
             navigate(mailUrl);

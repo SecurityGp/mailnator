@@ -623,23 +623,23 @@ public class PageActions {
 
     /**
      * Retrieves the URL from a matching message in the specified Mailinator inbox.
-     * It looks for a message whose "From" address and "Subject" match the expected values.
+     * It looks for a message whose "To" address and "Subject" match the expected values.
      * If found, it attempts to extract the invite URL from the subject or the links API.
      *
-     * @param domain          The Mailinator domain (e.g., "private").
      * @param mailbox         The mailbox (e.g., "abc").
-     * @param expectedFrom    The expected sender email address (e.g., "no-reply@withassured.com").
+     * @param expectedTo      The expected recipient email address (e.g., "user@withassured.com").
      * @param expectedSubject The expected subject or subject substring (e.g., "Onboarding Invite").
      * @return The extracted URL, or null if not found.
      */
-    @Step("Retrieve mail URL for domain: {0}, mailbox: {1}, expectedFrom: {2}, expectedSubject: {3}")
-    public static String getMailUrl(String domain, String mailbox, String expectedFrom, String expectedSubject) {
+    @Step("Retrieve mail URL for domain: {0}, mailbox: {1}, expectedTo: {2}, expectedSubject: {3}")
+    public static String getMailUrl( String mailbox, String expectedTo, String expectedSubject) {
+        String domain = "private";
         String url = null;
         String apiKey = "947fc29e9d3b4c4b80be0e65f27fd8db"; // Example API key
         try {
             ExtentReportManager.info("Retrieving mail URL for domain: " + domain
                     + ", mailbox: " + mailbox
-                    + ", expectedFrom: " + expectedFrom
+                    + ", expectedTo: " + expectedTo
                     + ", expectedSubject: " + expectedSubject);
 
             LogUtils.info("Requesting inbox for domain: " + domain);
@@ -659,14 +659,13 @@ public class PageActions {
                 return null;
             }
 
-
             Message matchingMessage = null;
             for (Message msg : messages) {
-                String from = msg.getFrom();
+                String to = msg.getTo();
                 String subject = msg.getSubject();
-                // If "from" and "subject" both match your expected criteria
-                if (from != null
-                        && from.equalsIgnoreCase(expectedFrom)
+                // If "to" and "subject" both match your expected criteria
+                if (to != null
+                        && to.equalsIgnoreCase(expectedTo)
                         && subject != null
                         && subject.contains(expectedSubject)) {
 
@@ -675,11 +674,10 @@ public class PageActions {
                 }
             }
 
-
             if (matchingMessage == null) {
                 String warnMsg = String.format(
-                        "No matching email found. Expected from='%s', subject containing='%s'",
-                        expectedFrom, expectedSubject
+                        "No matching email found. Expected to='%s', subject containing='%s'",
+                        expectedTo, expectedSubject
                 );
                 LogUtils.warn(warnMsg);
                 AllureManager.saveTextLog(warnMsg);
@@ -687,21 +685,19 @@ public class PageActions {
                 return null;
             }
 
-
             String messageId = matchingMessage.getId();
             String subject = matchingMessage.getSubject();
-            String from = matchingMessage.getFrom();
+            String to = matchingMessage.getTo();
 
             LogUtils.info("Matched message -> ID: " + messageId
-                    + ", From: " + from
+                    + ", To: " + to
                     + ", Subject: " + subject);
             AllureManager.saveTextLog("Matched message -> ID: " + messageId
-                    + ", From: " + from
+                    + ", To: " + to
                     + ", Subject: " + subject);
             ExtentReportManager.info("Matched message details -> ID: " + messageId
-                    + ", From: " + from
+                    + ", To: " + to
                     + ", Subject: " + subject);
-
 
             url = extractUrlFromSubject(subject);
             if (url != null) {
@@ -710,7 +706,6 @@ public class PageActions {
                 ExtentReportManager.info("Mail invite URL extracted from subject: " + url);
                 return url;
             } else {
-
                 LogUtils.warn("No URL found in subject. Trying links API for message id: " + messageId);
                 AllureManager.saveTextLog("No URL found in subject. Trying links API for message id: " + messageId);
                 ExtentReportManager.info("No URL in subject, checking links API...");
