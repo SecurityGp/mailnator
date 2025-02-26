@@ -74,7 +74,7 @@ public class test {
         String expectedSubject = "Onboarding Invite";
 
 
-        String mailUrl = PageActions.getMailUrl(domain, mailbox, expectedFrom, expectedSubject);
+        String mailUrl = PageActions.getMailUrl( mailbox, expectedFrom, expectedSubject);
         System.out.println("Retrieved Mail URL: " + mailUrl);
     }
 }
